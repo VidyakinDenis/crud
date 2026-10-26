@@ -1,10 +1,11 @@
-import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service.js';
 import type { UserCreate } from '../user/dto/userCreate.schema.js';
 import { UserCreateSchema } from '../user/dto/userCreate.schema.js';
 import type { UserLogin } from './dto/userLogin.schema.js';
 import { UserLoginSchema } from './dto/userLogin.schema.js';
 import { RefreshTokenSchema } from './dto/refreshToken.shcema.js';
+import { JwtAuthGuard } from './jwt-auth.guard.js';
 
 @Controller('auth')
 export class AuthController {

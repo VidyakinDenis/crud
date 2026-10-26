@@ -36,6 +36,7 @@
     "bcryptjs": "^3.0.3",
     "cross-env": "^10.1.0",
     "dayjs": "^1.11.23",
+    "dotenv": "^18.0.9",
     "kysely": "^0.29.7",
     "kysely-codegen": "^0.20.0",
     "kysely-ctl": "^0.22.0",

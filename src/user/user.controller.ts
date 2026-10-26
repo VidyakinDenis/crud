@@ -35,13 +35,22 @@ export class UserController {
   @Get('/:id')
   @UseGuards(JwtAuthGuard)
   async getUserById(@Param('id') id: number) {
-    return await this.userService.getUserById(id);
+    const user =  await this.userService.getUserById(id);
+    if (!user) throw new NotFoundException('User not found');
+    const { password, ...publicUser }: User = user;
+
+    return publicUser
   };
 
   @Get('/')
   @UseGuards(JwtAuthGuard)
   async getAllUsers(){
-    return await this.userService.getAllUsers();
+    const users =  await this.userService.getAllUsers();
+    if (!users.length) throw new NotFoundException('Users not found');
+    return users.map(user => {
+      const { password, ...publicUser }: User = user
+      return publicUser
+    })
   }
 
   @Post("/create")
@@ -56,7 +65,9 @@ export class UserController {
   @Patch("/:id")
   @UseGuards(JwtAuthGuard)
   async PatchUser(@Param("id", ParseIntPipe)id: number, dto: UserPatch){
-    return await this.userService.patchUser(dto, id)
+    const user  =  await this.userService.patchUser(dto, id)
+    const { password, ...publicUser }: User = user
+    return publicUser
   }
 
   @Delete("/:id")

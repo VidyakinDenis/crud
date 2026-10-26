@@ -120,8 +120,6 @@ export class AuthService {
 
   async refresh(refreshToken: string) {
 
-
-
     return await this.db.transaction().execute(async (trx) => {
       const hashedToken = this.hashToken(refreshToken);
 
@@ -131,7 +129,7 @@ export class AuthService {
         .where('token_hash', '=', hashedToken)
         .executeTakeFirst();
 
-      if (!foundedToken) return HttpStatus.UNAUTHORIZED;
+      if (!foundedToken) throw new UnauthorizedException('token not found');
 
       let payload: { sub: number; type: string; jti?: string };
       try {
@@ -140,14 +138,16 @@ export class AuthService {
         throw new UnauthorizedException('Invalid refresh token');
       }
 
-      if (payload.type !== 'refresh') throw new UnauthorizedException('Invalid token type');
-      const tokens = await this.generateTokens(payload.sub);
-      await this.saveRefreshToken(tokens.refreshToken, payload.sub, trx);
-
       await trx
         .deleteFrom('refresh_tokens')
         .where('token_hash', '=', hashedToken)
         .executeTakeFirst();
+
+      if (payload.type !== 'refresh') throw new UnauthorizedException('Invalid token type');
+      const tokens = await this.generateTokens(payload.sub);
+      await this.saveRefreshToken(tokens.refreshToken, payload.sub, trx);
+
+
 
       return tokens;
     });
