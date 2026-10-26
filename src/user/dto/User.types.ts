@@ -1,9 +1,3 @@
-export type TUser = {
-  name: string,
-  age: number,
-  password: string,
-  login: string,
-  email: string,
-  description: string,
-  id: number,
-}
+import { User } from './user.table.js';
+
+export type TPublicUser = Omit<User, 'password'>;

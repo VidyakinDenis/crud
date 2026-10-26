@@ -119,27 +119,28 @@ export class AuthService {
   }
 
   async refresh(refreshToken: string) {
-    const hashedToken = this.hashToken(refreshToken);
 
-    const foundedToken = await this.db
-      .selectFrom('refresh_tokens')
-      .selectAll()
-      .where('token_hash', '=', hashedToken)
-      .executeTakeFirst();
-
-    if (!foundedToken) return HttpStatus.UNAUTHORIZED;
-
-    let payload: { sub: number; type: string; jti?: string };
-    try {
-      payload = await this.getPayloadFromToken(refreshToken)
-    } catch {
-      throw new UnauthorizedException('Invalid refresh token');
-    }
-
-    if (payload.type !== 'refresh') throw new UnauthorizedException('Invalid token type');
 
 
     return await this.db.transaction().execute(async (trx) => {
+      const hashedToken = this.hashToken(refreshToken);
+
+      const foundedToken = await trx
+        .selectFrom('refresh_tokens')
+        .selectAll()
+        .where('token_hash', '=', hashedToken)
+        .executeTakeFirst();
+
+      if (!foundedToken) return HttpStatus.UNAUTHORIZED;
+
+      let payload: { sub: number; type: string; jti?: string };
+      try {
+        payload = await this.getPayloadFromToken(refreshToken)
+      } catch {
+        throw new UnauthorizedException('Invalid refresh token');
+      }
+
+      if (payload.type !== 'refresh') throw new UnauthorizedException('Invalid token type');
       const tokens = await this.generateTokens(payload.sub);
       await this.saveRefreshToken(tokens.refreshToken, payload.sub, trx);
 

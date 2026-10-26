@@ -40,7 +40,7 @@ export class AuthController {
   async refresh(@Body() refreshToken: string) {
     const result = RefreshTokenSchema.safeParse(refreshToken);
     if (!result.success) throw new BadRequestException(result.error.flatten());
-    return await this.authService.logout(result.data.refreshToken);
+    return await this.authService.refresh(result.data.refreshToken);
   }
 
 

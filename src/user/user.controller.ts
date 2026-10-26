@@ -3,7 +3,7 @@ import {
   Body,
   Controller,
   Delete,
-  Get,
+  Get, NotFoundException,
   Param,
   ParseIntPipe,
   Patch,
@@ -12,7 +12,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service.js';
-import type { UserCreate } from './dto/userCreate.schema.js';
 import type { UserPatch } from './dto/userPatch.schema.js';
 import { UserCreateSchema } from './dto/userCreate.schema.js';
 import { User } from './dto/user.table.js';
@@ -26,15 +25,21 @@ export class UserController {
   @Get('/my')
   @UseGuards(JwtAuthGuard)
   async getMyProfile(@Req() req: { user: { sub: number } }) {
-    return await this.userService.getUserById(req.user.sub);
+    const user = await this.userService.getUserById(req.user.sub);
+    if (!user) throw new NotFoundException('User not found');
+    const { password, ...publicUser }: User = user;
+
+    return publicUser
   };
 
   @Get('/:id')
+  @UseGuards(JwtAuthGuard)
   async getUserById(@Param('id') id: number) {
     return await this.userService.getUserById(id);
   };
 
   @Get('/')
+  @UseGuards(JwtAuthGuard)
   async getAllUsers(){
     return await this.userService.getAllUsers();
   }
@@ -49,11 +54,13 @@ export class UserController {
   }
 
   @Patch("/:id")
+  @UseGuards(JwtAuthGuard)
   async PatchUser(@Param("id", ParseIntPipe)id: number, dto: UserPatch){
     return await this.userService.patchUser(dto, id)
   }
 
   @Delete("/:id")
+  @UseGuards(JwtAuthGuard)
   async deleteUserById(@Param('id') id: number) {
     return await this.userService.deleteUserById(id)
   }
