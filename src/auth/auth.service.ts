@@ -7,7 +7,7 @@ import {
 import { InjectKysely } from 'nestjs-kysely';
 import { Kysely } from 'kysely';
 import { Database } from '../database/database.types.js';
-import { UserCreate } from '../user/dto/userCreate.schema.js';
+import { UserCreate, UserCreateDto } from '../user/dto/user-create.schema.js';
 import { UserService } from '../user/user.service.js';
 import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'bcryptjs';
@@ -36,7 +36,7 @@ export class AuthService {
     return tokens;
   }
 
-  async registration(userDto: UserCreate) {
+  async registration(userDto: UserCreateDto) {
     const candidate = await this.userService.getUsersByLogin(userDto.login);
     if (candidate) {
       throw new HttpException('User with this login is exists', HttpStatus.CONFLICT);

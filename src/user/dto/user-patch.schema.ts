@@ -1,4 +1,6 @@
 import { z } from 'zod';
+import { createZodDto } from 'nestjs-zod';
+import { UserIdParamSchema } from './user-params.schema.js';
 
 export const UserPatchSchema = z.object({
   name: z.string().trim().min(1).max(255).optional(),
@@ -11,3 +13,5 @@ export const UserPatchSchema = z.object({
 })
 
 export type UserPatch = z.infer<typeof UserPatchSchema>;
+export class UserPatchDto extends createZodDto(UserPatchSchema) {
+}

@@ -8,7 +8,8 @@ export interface UserTable {
   password: string,
   age: number,
   login: string,
-  description: string
+  description: string,
+  deleted: boolean
 }
 
 export type User = Selectable<UserTable>;
