@@ -1,13 +1,10 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module.js';
-import { DocumentBuilder } from '@nestjs/swagger';
+import {NestFactory} from "@nestjs/core"
+import { AppModule } from './app/app.module.js';
 
-(async function () {
-  const PORT = process.env.PORT || 5000;
-  const app = await NestFactory.create(AppModule);
+(async function start (){
+  const PORT = process.env.PORT || 5000
+  const app = await NestFactory.create(AppModule)
+  app.setGlobalPrefix('api');
 
-  const config = new DocumentBuilder();
-
-
-  await app.listen(PORT, () => console.log(`Server start on port ${PORT}`));
-})();
+  await app.listen(PORT, () => console.log(`Server start on port ${PORT}`))
+})()
