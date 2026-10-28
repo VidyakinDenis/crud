@@ -1,7 +1,7 @@
 import { Generated, Insertable, Selectable, Updateable } from 'kysely';
 import { z } from 'zod';
 
-export interface UserTable {
+export interface IUserTable {
   id: Generated<number>,
   name: string,
   email: string,
@@ -12,6 +12,6 @@ export interface UserTable {
   deleted: boolean
 }
 
-export type User = Selectable<UserTable>;
-export type NewUser = Insertable<UserTable>;
-export type UserUpdate = Updateable<UserTable>;
+export type User = Selectable<IUserTable>;
+export type NewUser = Insertable<IUserTable>;
+export type UserUpdate = Updateable<IUserTable>;

@@ -1,7 +1,7 @@
-import { UserTable } from '../user/dto/user.table.js';
-import { RefreshTokensTable } from '../auth/refresh_tokens.table.js';
+import { IUserTable } from '../user/dto/user.table.js';
+import { RefreshTokensTable } from '../auth/dto/refresh_tokens.table.js';
 
 export type Database = {
-  users: UserTable
+  users: IUserTable
   refresh_tokens: RefreshTokensTable
 }

@@ -1,6 +1,5 @@
 import type { Kysely } from 'kysely';
 
-// `any` is required here since migrations should be frozen in time. alternatively, keep a "snapshot" db interface.
 export async function up(db: Kysely<any>): Promise<void> {
   await db.schema.createTable('refresh_tokens')
     .addColumn('id', 'serial', (col) => col.primaryKey())
@@ -18,7 +17,6 @@ export async function up(db: Kysely<any>): Promise<void> {
   ;
 }
 
-// `any` is required here since migrations should be frozen in time. alternatively, keep a "snapshot" db interface.
 export async function down(db: Kysely<any>): Promise<void> {
   await db.schema.dropTable('refresh_tokens');
 }

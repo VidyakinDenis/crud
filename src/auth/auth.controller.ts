@@ -5,7 +5,7 @@ import { UserCreateSchema } from '../user/dto/user-create.schema.js';
 import { UserLogin, UserLoginDto } from './dto/userLogin.schema.js';
 import { UserLoginSchema } from './dto/userLogin.schema.js';
 import { RefreshTokenDto, RefreshTokenSchema, TokensPairDto } from './dto/tokens.schema.js';
-import { JwtAuthGuard } from './jwt-auth.guard.js';
+import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
 import { ApiBearerAuth, ApiNoContentResponse, ApiOkResponse, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { UserResponseDto } from '../user/dto/user-response.dto.js';
 
